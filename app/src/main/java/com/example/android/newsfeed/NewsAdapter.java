@@ -10,6 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 
@@ -36,7 +40,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
         viewHolder.titleTextView.setText(currentNews.getmTitle());
         viewHolder.sectionTextView.setText(currentNews.getmSection());
-        viewHolder.dateTextView.setText(currentNews.getmDate());
+        viewHolder.dateTextView.setText(formatDate(currentNews.getmDate()));
         viewHolder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -61,6 +65,19 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         mNewsList.clear();
         mNewsList.addAll(newsList);
         notifyDataSetChanged();
+    }
+
+    private String formatDate(String dateString) {
+        SimpleDateFormat simpleDateFormat =
+                new SimpleDateFormat("yyyy-MM-dd'T'kk:mm:ss'Z'");
+        Date dateObject = null;
+        try {
+            dateObject = simpleDateFormat.parse(dateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        simpleDateFormat = new SimpleDateFormat("h:mm a (yyyy-MM-dd)");
+        return simpleDateFormat.format(dateObject);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
