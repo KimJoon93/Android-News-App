@@ -116,8 +116,9 @@ public class QueryUtils {
             for (int i = 0; i < resultsArray.length(); i++) {
                 JSONObject currentNews = resultsArray.getJSONObject(i);
                 String webTitle = currentNews.getString("webTitle");
+                String sectionName = currentNews.getString("sectionName");
                 String webUrl = currentNews.getString("webUrl");
-                NewsData news = new NewsData(webTitle, webUrl);
+                NewsData news = new NewsData(webTitle, sectionName, webUrl);
                 newsList.add(news);
             }
 

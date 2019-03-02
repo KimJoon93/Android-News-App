@@ -1,5 +1,8 @@
 package com.example.android.newsfeed;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -7,10 +10,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,21 +25,29 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
     private NewsAdapter mnewsAdapter;
     private static final int NEWS_LOADER_ID = 1;
 
+    private TextView mEmptyStateTextView;
+
+    private View mLoadingIndicator;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
+        EmptyRecyclerView mRecyclerView = view.findViewById(R.id.recycler_view);
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(layoutManager);
+
+        mLoadingIndicator = view.findViewById(R.id.loading_indicator);
+
+        mEmptyStateTextView = view.findViewById(R.id.empty_view);
+        mRecyclerView.setEmptyView(mEmptyStateTextView);
 
         mnewsAdapter = new NewsAdapter(getActivity(), new ArrayList<NewsData>());
-        recyclerView.setAdapter(mnewsAdapter);
-        LoaderManager loaderManager = getLoaderManager();
-        loaderManager.initLoader(NEWS_LOADER_ID, null, this);
-
+        mRecyclerView.setAdapter(mnewsAdapter);
+        checkNetworkConnection();
         return view;
     }
 
@@ -48,7 +59,11 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public void onLoadFinished(@NonNull Loader<List<NewsData>> loader, List<NewsData> newsData) {
+
+        mLoadingIndicator.setVisibility(View.GONE);
+        mEmptyStateTextView.setText(R.string.no_news);
         mnewsAdapter.clearAll();
+
         if (newsData != null && !newsData.isEmpty()) {
             mnewsAdapter.addAll(newsData);
         }
@@ -57,6 +72,22 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
     @Override
     public void onLoaderReset(@NonNull Loader<List<NewsData>> loader) {
         mnewsAdapter.clearAll();
+    }
+
+    private void checkNetworkConnection() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+        boolean isConnected = networkInfo != null &&
+                networkInfo.isConnected();
+        if (isConnected) {
+            LoaderManager loaderManager = getLoaderManager();
+            loaderManager.initLoader(NEWS_LOADER_ID, null, this);
+        } else {
+            mLoadingIndicator.setVisibility(View.GONE);
+            mEmptyStateTextView.setText(R.string.NoInternet);
+        }
     }
 
 }
