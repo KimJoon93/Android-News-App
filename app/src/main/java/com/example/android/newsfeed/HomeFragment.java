@@ -21,7 +21,9 @@ import java.util.List;
 public class HomeFragment extends Fragment implements LoaderManager.LoaderCallbacks<List<NewsData>> {
 
     public static final String LOG_TAG = HomeFragment.class.getSimpleName();
-    private static final String NEWS_REQUEST_URL = "http://content.guardianapis.com/search?q=debates&api-key=test";
+    private static final String NEWS_REQUEST_URL_1 = "http://content.guardianapis.com/search?q=debates&api-key=test";
+    private static final String NEWS_REQUEST_URL = "https://content.guardianapis.com/search?q=debate&show-fields=trailText&show-tags=contributor&api-key=test";
+
     private NewsAdapter mnewsAdapter;
     private static final int NEWS_LOADER_ID = 1;
 
