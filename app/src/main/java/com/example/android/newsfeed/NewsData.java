@@ -6,13 +6,15 @@ public class NewsData {
     private String mAuthor;
     private String mDate;
     private String mUrl;
+    private String mThumbnail;
 
-    public NewsData(String mTitle,String mSection,String mAuthor, String mDate, String mUrl) {
+    public NewsData(String mTitle,String mSection,String mAuthor, String mDate, String mUrl, String mThumbnail) {
         this.mTitle = mTitle;
         this.mSection = mSection;
         this.mAuthor = mAuthor;
         this.mDate = mDate;
         this.mUrl = mUrl;
+        this.mThumbnail = mThumbnail;
     }
 
     public String getmTitle() {
@@ -33,5 +35,9 @@ public class NewsData {
 
     public String getmUrl() {
         return mUrl;
+    }
+
+    public String getmThumbnail() {
+        return mThumbnail;
     }
 }

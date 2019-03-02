@@ -114,6 +114,7 @@ public class QueryUtils {
                 String webPublicationDate = currentNews.getString("webPublicationDate");
                 String webUrl = currentNews.getString("webUrl");
 
+                /**Author Part */
                 String author = null;
                 if (currentNews.has("tags")) {
                     JSONArray tagsArray = currentNews.getJSONArray("tags");
@@ -122,7 +123,16 @@ public class QueryUtils {
                         author = firstTagsItem.getString("webTitle");
                     }
                 }
-                NewsData news = new NewsData(webTitle, sectionName, author, webPublicationDate,webUrl);
+
+                /**Thumbnail Part */
+                String thumbnail = null;
+                if (currentNews.has("fields")) {
+                    JSONObject fieldsArray = currentNews.getJSONObject("fields");
+                    if (fieldsArray.length() != 0) {
+                        thumbnail = fieldsArray.getString("thumbnail");
+                    }
+                }
+                NewsData news = new NewsData(webTitle, sectionName, author, webPublicationDate,webUrl,thumbnail);
                 newsList.add(news);
             }
 
