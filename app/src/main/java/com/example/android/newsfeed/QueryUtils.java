@@ -52,7 +52,6 @@ public class QueryUtils {
     private static String makeHttpRequest(URL url) throws IOException {
         String jsonResponse = "";
 
-        // If the URL is null, then return early.
         if (url == null) {
             return jsonResponse;
         }
@@ -66,8 +65,6 @@ public class QueryUtils {
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
 
-            // If the request was successful (response code 200),
-            // then read the input stream and parse the response.
             if (urlConnection.getResponseCode() == 200) {
                 inputStream = urlConnection.getInputStream();
                 jsonResponse = readFromStream(inputStream);
@@ -81,9 +78,6 @@ public class QueryUtils {
                 urlConnection.disconnect();
             }
             if (inputStream != null) {
-                // Closing the input stream could throw an IOException, which is why
-                // the makeHttpRequest(URL url) method signature specifies that an IOException
-                // could be thrown.
                 inputStream.close();
             }
         }
@@ -117,8 +111,9 @@ public class QueryUtils {
                 JSONObject currentNews = resultsArray.getJSONObject(i);
                 String webTitle = currentNews.getString("webTitle");
                 String sectionName = currentNews.getString("sectionName");
+                String webPublicationDate = currentNews.getString("webPublicationDate");
                 String webUrl = currentNews.getString("webUrl");
-                NewsData news = new NewsData(webTitle, sectionName, webUrl);
+                NewsData news = new NewsData(webTitle, sectionName,webPublicationDate,webUrl);
                 newsList.add(news);
             }
 
