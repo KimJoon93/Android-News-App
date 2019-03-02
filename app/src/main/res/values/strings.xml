@@ -9,5 +9,6 @@
 
     <string name="no_news">No news.</string>
     <string name="NoInternet">No internet connection.</string>
+    <string name="image_des">Image</string>
 
 </resources>

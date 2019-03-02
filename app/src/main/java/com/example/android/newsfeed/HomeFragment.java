@@ -9,11 +9,14 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +33,7 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
     private TextView mEmptyStateTextView;
 
     private View mLoadingIndicator;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,6 +46,21 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(layoutManager);
 
+        mSwipeRefreshLayout = view.findViewById(R.id.swipe_refresh);
+        mSwipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.swipe_color_1),
+                getResources().getColor(R.color.swipe_color_2),
+                getResources().getColor(R.color.swipe_color_3),
+                getResources().getColor(R.color.swipe_color_4));
+
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Log.i(LOG_TAG, "onRefresh called from SwipeRefreshLayout");
+                initiateRefresh();
+                Toast.makeText(getActivity(), "SwipeRefresh", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         mLoadingIndicator = view.findViewById(R.id.loading_indicator);
 
         mEmptyStateTextView = view.findViewById(R.id.empty_view);
@@ -49,7 +68,7 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
 
         mnewsAdapter = new NewsAdapter(getActivity(), new ArrayList<NewsData>());
         mRecyclerView.setAdapter(mnewsAdapter);
-        checkNetworkConnection();
+        initializeLoader(isConnected());
         return view;
     }
 
@@ -69,6 +88,7 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
         if (newsData != null && !newsData.isEmpty()) {
             mnewsAdapter.addAll(newsData);
         }
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -76,13 +96,15 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
         mnewsAdapter.clearAll();
     }
 
-    private void checkNetworkConnection() {
+    private boolean isConnected() {
         ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
 
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
-        boolean isConnected = networkInfo != null &&
-                networkInfo.isConnected();
+        return (networkInfo != null && networkInfo.isConnected());
+    }
+
+    private void initializeLoader(boolean isConnected) {
         if (isConnected) {
             LoaderManager loaderManager = getLoaderManager();
             loaderManager.initLoader(NEWS_LOADER_ID, null, this);
@@ -90,6 +112,22 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
             mLoadingIndicator.setVisibility(View.GONE);
             mEmptyStateTextView.setText(R.string.NoInternet);
         }
+    }
+
+    private void restartLoader(boolean isConnected) {
+        if (isConnected) {
+            LoaderManager loaderManager = getLoaderManager();
+            loaderManager.restartLoader(NEWS_LOADER_ID, null, this);
+        } else {
+            mLoadingIndicator.setVisibility(View.GONE);
+            mEmptyStateTextView.setText(R.string.NoInternet);
+            mSwipeRefreshLayout.setVisibility(View.GONE);
+        }
+
+    }
+
+    private void initiateRefresh() {
+        restartLoader(isConnected());
     }
 
 }
