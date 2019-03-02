@@ -9,7 +9,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -51,6 +54,10 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
                 mContext.startActivity(webIntent);
             }
         });
+
+        Picasso.with(mContext.getApplicationContext())
+                .load(currentNews.getmThumbnail())
+                .into(viewHolder.thumbnailImageView);
     }
 
     @Override
@@ -88,6 +95,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         private TextView authorTextView;
         private TextView dateTextView;
         private TextView thumbnailTextView;
+        private ImageView thumbnailImageView;
         private CardView cardView;
 
 
@@ -98,6 +106,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
             authorTextView = itemView.findViewById(R.id.author_card);
             dateTextView = itemView.findViewById(R.id.date_card);
             thumbnailTextView = itemView.findViewById(R.id.thumbnail_card);
+            thumbnailImageView = itemView.findViewById(R.id.thumbnail_image_card);
             cardView = itemView.findViewById(R.id.card_view);
         }
     }
