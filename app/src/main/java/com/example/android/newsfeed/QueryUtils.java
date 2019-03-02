@@ -103,7 +103,7 @@ public class QueryUtils {
         }
         return output.toString();
     }
-    public static List<NewsData> extractFeatureFromJson(String newsJson) {
+    private static List<NewsData> extractFeatureFromJson(String newsJson) {
         if (TextUtils.isEmpty(newsJson)) {
             return null;
         }
