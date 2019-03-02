@@ -25,7 +25,7 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
 
     public static final String LOG_TAG = HomeFragment.class.getSimpleName();
     private static final String NEWS_REQUEST_URL_1 = "http://content.guardianapis.com/search?q=debates&api-key=test";
-    private static final String NEWS_REQUEST_URL = "https://content.guardianapis.com/search?q=debate&show-fields=thumbnail&show-tags=contributor&api-key=test";
+    private static final String NEWS_REQUEST_URL = "https://content.guardianapis.com/search?q=debate&show-fields=thumbnail,trailText&show-tags=contributor&api-key=test";
 
     private NewsAdapter mnewsAdapter;
     private static final int NEWS_LOADER_ID = 1;
@@ -55,9 +55,8 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                Log.i(LOG_TAG, "onRefresh called from SwipeRefreshLayout");
                 initiateRefresh();
-                Toast.makeText(getActivity(), "SwipeRefresh", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Refreshed Complete!", Toast.LENGTH_SHORT).show();
             }
         });
 

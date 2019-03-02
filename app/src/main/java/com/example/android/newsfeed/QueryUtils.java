@@ -124,15 +124,18 @@ public class QueryUtils {
                     }
                 }
 
-                /**Thumbnail Part */
+                /**Thumbnail, trail Part */
                 String thumbnail = null;
+                String trailText = null;
+
                 if (currentNews.has("fields")) {
                     JSONObject fieldsArray = currentNews.getJSONObject("fields");
                     if (fieldsArray.length() != 0) {
                         thumbnail = fieldsArray.getString("thumbnail");
+                        trailText = fieldsArray.getString("trailText");
                     }
                 }
-                NewsData news = new NewsData(webTitle, sectionName, author, webPublicationDate,webUrl,thumbnail);
+                NewsData news = new NewsData(webTitle, sectionName, author, webPublicationDate,webUrl,thumbnail, trailText);
                 newsList.add(news);
             }
 

@@ -7,14 +7,16 @@ public class NewsData {
     private String mDate;
     private String mUrl;
     private String mThumbnail;
+    private String mTrailTextHTML;
 
-    public NewsData(String mTitle,String mSection,String mAuthor, String mDate, String mUrl, String mThumbnail) {
+    public NewsData(String mTitle,String mSection,String mAuthor, String mDate, String mUrl, String mThumbnail,String mTrailTextHTML) {
         this.mTitle = mTitle;
         this.mSection = mSection;
         this.mAuthor = mAuthor;
         this.mDate = mDate;
         this.mUrl = mUrl;
         this.mThumbnail = mThumbnail;
+        this.mTrailTextHTML = mTrailTextHTML;
     }
 
     public String getmTitle() {
@@ -39,5 +41,9 @@ public class NewsData {
 
     public String getmThumbnail() {
         return mThumbnail;
+    }
+
+    public String getmTrailTextHTML() {
+        return mTrailTextHTML;
     }
 }
