@@ -45,7 +45,13 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         viewHolder.titleTextView.setText(currentNews.getmTitle());
         viewHolder.sectionTextView.setText(currentNews.getmSection());
         viewHolder.dateTextView.setText(formatDate(currentNews.getmDate()));
-        viewHolder.authorTextView.setText(currentNews.getmAuthor());
+
+        if (currentNews.getmAuthor() == null) {
+            viewHolder.authorTextView.setVisibility(View.GONE);
+        } else {
+            viewHolder.authorTextView.setVisibility(View.VISIBLE);
+            viewHolder.authorTextView.setText(currentNews.getmAuthor());
+        }
 
         String trailTextHTML = currentNews.getmTrailTextHTML();
         viewHolder.trailTextView.setText(Html.fromHtml(Html.fromHtml(trailTextHTML).toString()));
