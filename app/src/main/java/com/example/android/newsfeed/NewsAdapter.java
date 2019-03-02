@@ -16,11 +16,11 @@ import java.util.List;
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
     private Context mContext;
-    private List<NewsData> mNews;
+    private List<NewsData> mNewsList;
 
-    public NewsAdapter(Context mContext, List<NewsData> mNews) {
+    public NewsAdapter(Context mContext, List<NewsData> mNewsList) {
         this.mContext = mContext;
-        this.mNews = mNews;
+        this.mNewsList = mNewsList;
     }
 
     @NonNull
@@ -32,7 +32,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        final NewsData currentNews = mNews.get(i);
+        final NewsData currentNews = mNewsList.get(i);
 
         viewHolder.titleTextView.setText(currentNews.getmTitle());
         viewHolder.cardView.setOnClickListener(new View.OnClickListener() {
@@ -47,7 +47,18 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return mNews.size();
+        return mNewsList.size();
+    }
+
+    public void clearAll() {
+        mNewsList.clear();
+        notifyDataSetChanged();
+    }
+
+    public void addAll(List<NewsData> newsList) {
+        mNewsList.clear();
+        mNewsList.addAll(newsList);
+        notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
